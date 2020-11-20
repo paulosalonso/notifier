@@ -5,6 +5,7 @@ import com.github.paulosalonso.notifier.adapter.kafka.producer.NotificationProdu
 import com.github.paulosalonso.notifier.adapter.notifier.email.EmailNotifier;
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
+import com.sendgrid.SendGrid;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,11 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = RANDOM_PORT, properties = { "notifier.email.service-type=smtp" })
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {
+        "notifier.email.service-type=smtp",
+        "notifier.email.sendgrid.api-key=apiKey",
+        "spring.kafka.bootstrap-servers=localhost:9092"
+})
 class NotificationControllerIT {
 
     @LocalServerPort
@@ -37,6 +42,9 @@ class NotificationControllerIT {
 
     @MockBean
     private NotificationProducer producer;
+
+    @MockBean
+    private SendGrid sendGrid;
 
     @BeforeEach
     void setup() {
