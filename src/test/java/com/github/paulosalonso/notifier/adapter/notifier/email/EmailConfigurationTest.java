@@ -1,6 +1,9 @@
 package com.github.paulosalonso.notifier.adapter.notifier.email;
 
 import com.github.paulosalonso.notifier.adapter.configuration.EmailConfiguration;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotifier;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailServiceType;
 import com.sendgrid.SendGrid;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,7 +1,7 @@
 package com.github.paulosalonso.notifier.adapter.mapper;
 
 import com.github.paulosalonso.notifier.adapter.api.mapper.EmailAdditionalPropertyMapper;
-import com.github.paulosalonso.notifier.adapter.notifier.email.EmailNotificationProperty;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotificationProperty;
 import com.github.paulosalonso.notifier.domain.NotificationAdditionalProperty;
 import com.github.paulosalonso.notifier.domain.NotificationType;
 import org.junit.jupiter.api.BeforeEach;

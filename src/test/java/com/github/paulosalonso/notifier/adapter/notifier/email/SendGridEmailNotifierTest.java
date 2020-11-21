@@ -1,7 +1,7 @@
 package com.github.paulosalonso.notifier.adapter.notifier.email;
 
-import com.github.paulosalonso.notifier.adapter.api.mapper.EmailAdditionalPropertyMapper;
-import com.github.paulosalonso.notifier.adapter.configuration.EmailConfiguration;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailException;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
 import com.sendgrid.Method;
@@ -14,12 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 
-import static com.github.paulosalonso.notifier.adapter.notifier.email.EmailNotificationProperty.IS_HTML_MESSAGE;
+import static com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotificationProperty.IS_HTML_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;

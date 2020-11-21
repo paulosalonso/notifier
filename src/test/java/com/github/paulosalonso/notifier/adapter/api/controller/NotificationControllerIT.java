@@ -2,7 +2,7 @@ package com.github.paulosalonso.notifier.adapter.api.controller;
 
 import com.github.paulosalonso.notifier.adapter.api.NotificationDTO;
 import com.github.paulosalonso.notifier.adapter.kafka.producer.NotificationProducer;
-import com.github.paulosalonso.notifier.adapter.notifier.email.EmailNotifier;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotifier;
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
 import com.sendgrid.SendGrid;

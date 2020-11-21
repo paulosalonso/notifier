@@ -1,5 +1,7 @@
 package com.github.paulosalonso.notifier.adapter.notifier.email;
 
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotifier;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.github.paulosalonso.notifier.domain.Notification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

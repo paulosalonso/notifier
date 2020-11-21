@@ -1,5 +1,8 @@
 package com.github.paulosalonso.notifier.adapter.notifier.email;
 
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailException;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotificationProperty;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.github.paulosalonso.notifier.domain.Notification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
