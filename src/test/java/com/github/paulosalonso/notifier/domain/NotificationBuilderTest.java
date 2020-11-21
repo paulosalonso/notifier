@@ -2,7 +2,7 @@ package com.github.paulosalonso.notifier.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.paulosalonso.notifier.adapter.notifier.email.EmailNotificationProperty.IS_HTML_MESSAGE;
+import static com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotificationProperty.IS_HTML_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

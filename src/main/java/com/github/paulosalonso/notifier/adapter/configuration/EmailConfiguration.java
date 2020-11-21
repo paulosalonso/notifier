@@ -1,6 +1,8 @@
 package com.github.paulosalonso.notifier.adapter.configuration;
 
 import com.github.paulosalonso.notifier.adapter.notifier.email.*;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotifier;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.sendgrid.SendGrid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

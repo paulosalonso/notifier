@@ -1,4 +1,4 @@
-package com.github.paulosalonso.notifier.adapter.notifier.email;
+package com.github.paulosalonso.notifier.adapter.notifier.email.common;
 
 import com.github.paulosalonso.notifier.domain.NotificationAdditionalProperty;
 

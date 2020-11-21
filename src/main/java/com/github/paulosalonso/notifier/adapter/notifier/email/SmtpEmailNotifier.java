@@ -1,5 +1,8 @@
 package com.github.paulosalonso.notifier.adapter.notifier.email;
 
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailException;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotifier;
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.github.paulosalonso.notifier.domain.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,7 +12,7 @@ import javax.mail.internet.MimeMessage;
 
 import java.util.Optional;
 
-import static com.github.paulosalonso.notifier.adapter.notifier.email.EmailNotificationProperty.IS_HTML_MESSAGE;
+import static com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotificationProperty.IS_HTML_MESSAGE;
 
 @RequiredArgsConstructor
 public class SmtpEmailNotifier implements EmailNotifier {
