@@ -1,5 +1,6 @@
-package com.github.paulosalonso.notifier.adapter.notifier.email.common;
+package com.github.paulosalonso.notifier.adapter.configuration;
 
+import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailServiceType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,12 +14,5 @@ import java.util.List;
 @ConfigurationProperties("notifier.email")
 public class EmailProperties {
     public String sender;
-    public EmailServiceType serviceType = EmailServiceType.FAKE;
-    public Sandbox sandbox = new Sandbox();
-
-    @Getter
-    @Setter
-    public class Sandbox {
-        public List<String> recipients;
-    }
+    public EmailServiceType serviceType = EmailServiceType.SMTP;
 }
