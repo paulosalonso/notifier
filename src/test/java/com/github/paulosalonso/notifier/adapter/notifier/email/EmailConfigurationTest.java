@@ -2,7 +2,7 @@ package com.github.paulosalonso.notifier.adapter.notifier.email;
 
 import com.github.paulosalonso.notifier.adapter.configuration.EmailConfiguration;
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotifier;
-import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
+import com.github.paulosalonso.notifier.adapter.configuration.EmailProperties;
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailServiceType;
 import com.sendgrid.SendGrid;
 import org.junit.jupiter.api.Test;
@@ -32,32 +32,6 @@ class EmailConfigurationTest {
 
     @Mock
     private SendGrid sendGrid;
-
-    @Test
-    void givenFakeEmailNotifierTypeConfigurationWhenRequestEmailNotifierBeanThenReturnFakeImplementation() {
-        emailProperties.serviceType = EmailServiceType.FAKE;
-        EmailNotifier emailNotifier = emailConfiguration.emailNotifier(javaMailSender, null);
-        assertThat(emailNotifier).isExactlyInstanceOf(FakeEmailNotifier.class);
-
-        Field propertiesField = ReflectionUtils.findField(FakeEmailNotifier.class, "properties");
-        propertiesField.setAccessible(true);
-        assertThat(ReflectionUtils.getField(propertiesField, emailNotifier)).isEqualTo(emailProperties);
-    }
-
-    @Test
-    void givenSandboxEmailNotifierTypeConfigurationWhenRequestEmailNotifierBeanThenReturnSandboxImplementation() {
-        emailProperties.serviceType = EmailServiceType.SANDBOX;
-        EmailNotifier emailNotifier = emailConfiguration.emailNotifier(javaMailSender, sendGrid);
-        assertThat(emailNotifier).isExactlyInstanceOf(SandboxEmailNotifier.class);
-
-        Field mailSenderField = ReflectionUtils.findField(SandboxEmailNotifier.class, "mailSender");
-        mailSenderField.setAccessible(true);
-        assertThat(ReflectionUtils.getField(mailSenderField, emailNotifier)).isEqualTo(javaMailSender);
-
-        Field propertiesField = ReflectionUtils.findField(SandboxEmailNotifier.class, "properties");
-        propertiesField.setAccessible(true);
-        assertThat(ReflectionUtils.getField(propertiesField, emailNotifier)).isEqualTo(emailProperties);
-    }
 
     @Test
     void givenSmtpEmailNotifierTypeConfigurationWhenRequestEmailNotifierBeanThenReturnSmtpImplementation() {

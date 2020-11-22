@@ -233,6 +233,7 @@
 						<exclude>**/*NotifierApplication.*</exclude>
 						<exclude>**/exceptionhandler/**</exclude>
 						<exclude>**/avro/**</exclude>
+						<exclude>**/SandboxConfiguration.*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

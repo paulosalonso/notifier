@@ -6,6 +6,7 @@ import com.github.paulosalonso.notifier.adapter.notifier.whatsapp.WhatsAppNotifi
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
 import com.github.paulosalonso.notifier.usecase.port.NotifierPort;
+import com.github.paulosalonso.notifier.usecase.port.SandboxPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,8 @@ class NotifyUseCaseTest {
 
     private List<NotifierPort> notifiers;
 
+    private SandboxPort sandbox;
+
     @Mock
     private NotifierPort emailNotifier;
 
@@ -40,7 +43,10 @@ class NotifyUseCaseTest {
     @BeforeEach
     void setup() {
         notifiers = List.of(emailNotifier, slackNotifier, smsNotifier, whatsAppNotifier);
-        notifyUseCase = new NotifyUseCase(notifiers);
+        sandbox = spy(new SandboxPort(notifiers, List.of("email-sandbox-recipient"), List.of("slack-sandbox-recipient"),
+                List.of("sms-sandbox-recipient"), List.of("whatsapp-sandbox-recipient")));
+
+        notifyUseCase = new NotifyUseCase(notifiers, sandbox, false);
 
         lenient().when(emailNotifier.attendedNotificationType()).thenReturn(NotificationType.EMAIL);
         lenient().when(slackNotifier.attendedNotificationType()).thenReturn(NotificationType.SLACK);
@@ -61,6 +67,7 @@ class NotifyUseCaseTest {
         verify(slackNotifier, never()).send(any(Notification.class));
         verify(smsNotifier, never()).send(any(Notification.class));
         verify(whatsAppNotifier, never()).send(any(Notification.class));
+        verifyNoInteractions(sandbox);
     }
 
     @Test
@@ -76,6 +83,7 @@ class NotifyUseCaseTest {
         verify(emailNotifier, never()).send(any(Notification.class));
         verify(smsNotifier, never()).send(any(Notification.class));
         verify(whatsAppNotifier, never()).send(any(Notification.class));
+        verifyNoInteractions(sandbox);
     }
 
     @Test
@@ -91,6 +99,7 @@ class NotifyUseCaseTest {
         verify(emailNotifier, never()).send(any(Notification.class));
         verify(slackNotifier, never()).send(any(Notification.class));
         verify(smsNotifier, never()).send(any(Notification.class));
+        verifyNoInteractions(sandbox);
     }
 
     @Test
@@ -106,6 +115,20 @@ class NotifyUseCaseTest {
         verify(emailNotifier, never()).send(any(Notification.class));
         verify(slackNotifier, never()).send(any(Notification.class));
         verify(whatsAppNotifier, never()).send(any(Notification.class));
+        verifyNoInteractions(sandbox);
+    }
+
+    @Test
+    public void givenEnabledSandboxConfigurationWhenNotifiesThenCallSandbox() {
+        notifyUseCase = new NotifyUseCase(notifiers, sandbox, true);
+
+        Notification notification = Notification.builder()
+                .type(NotificationType.EMAIL)
+                .build();
+
+        notifyUseCase.send(notification);
+
+        verify(sandbox).send(notification);
     }
 
     @Test
