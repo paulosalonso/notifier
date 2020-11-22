@@ -4,6 +4,7 @@ import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailExcep
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotificationProperty;
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.github.paulosalonso.notifier.domain.Notification;
+import com.github.paulosalonso.notifier.domain.NotificationType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,11 @@ public class SmtpEmailNotifierTest {
     @BeforeEach
     void setup() {
         emailProperties.sender = "default-sender";
+    }
+
+    @Test
+    public void whenGetAttendedNotificationTypeThenReturnEmail() {
+        assertThat(smtpEmailNotifier.attendedNotificationType()).isEqualTo(NotificationType.EMAIL);
     }
 
     @Test

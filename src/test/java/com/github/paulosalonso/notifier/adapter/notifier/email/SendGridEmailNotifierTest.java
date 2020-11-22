@@ -45,6 +45,11 @@ public class SendGridEmailNotifierTest {
     }
 
     @Test
+    public void whenGetAttendedNotificationTypeThenReturnEmail() {
+        assertThat(notifier.attendedNotificationType()).isEqualTo(NotificationType.EMAIL);
+    }
+
+    @Test
     public void givenAPlainTextNotificationWhenSendThenCallSendGridApiMethod() throws IOException {
         Notification notification = Notification.builder()
                 .type(NotificationType.EMAIL)
