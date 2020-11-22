@@ -3,6 +3,7 @@ package com.github.paulosalonso.notifier.adapter.api.controller;
 import com.github.paulosalonso.notifier.adapter.api.NotificationDTO;
 import com.github.paulosalonso.notifier.adapter.kafka.producer.NotificationProducer;
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailNotifier;
+import com.github.paulosalonso.notifier.adapter.notifier.whatsapp.WhatsAppNotifier;
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
 import com.sendgrid.SendGrid;
@@ -22,8 +23,7 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @ExtendWith(SpringExtension.class)
@@ -40,6 +40,9 @@ class NotificationControllerIT {
     @SpyBean
     private EmailNotifier emailNotifier;
 
+    @SpyBean
+    private WhatsAppNotifier whatsAppNotifier;
+
     @MockBean
     private NotificationProducer producer;
 
@@ -49,10 +52,13 @@ class NotificationControllerIT {
     @BeforeEach
     void setup() {
         RestAssured.port = port;
+
+        doNothing().when(emailNotifier).send(any(Notification.class));
+        doNothing().when(whatsAppNotifier).send(any(Notification.class));
     }
 
     @Test
-    void whenPostANotificationThenReturnAccepted() {
+    void whenPostAEmailNotificationThenReturnAcceptedAndCallEmailNotifier() {
         doNothing().when(emailNotifier).send(any(Notification.class));
 
         given()
@@ -78,6 +84,36 @@ class NotificationControllerIT {
         assertThat(notification.getRecipients())
                 .hasSize(1)
                 .first().isEqualTo("recipient@mail.com");
+        assertThat(notification.getSubject()).isEqualTo("Integrated test notification");
+        assertThat(notification.getMessage()).isEqualTo("Message");
+    }
+
+    @Test
+    void whenPostAWhatsAppNotificationThenReturnAcceptedAndCallEmailNotifier() {
+        doNothing().when(emailNotifier).send(any(Notification.class));
+
+        given()
+                .contentType("application/json")
+                .body(NotificationDTO.builder()
+                        .type(NotificationType.WHATSAPP)
+                        .sender("+5500000000000")
+                        .recipient("+5511111111111")
+                        .subject("Integrated test notification")
+                        .message("Message")
+                        .build())
+                .when()
+                .post("/notifications")
+                .then()
+                .statusCode(HttpStatus.ACCEPTED.value());
+
+        ArgumentCaptor<Notification> notificationCaptor = ArgumentCaptor.forClass(Notification.class);
+        verify(whatsAppNotifier).send(notificationCaptor.capture());
+
+        Notification notification = notificationCaptor.getValue();
+        assertThat(notification.getSender()).isEqualTo("+5500000000000");
+        assertThat(notification.getRecipients())
+                .hasSize(1)
+                .first().isEqualTo("+5511111111111");
         assertThat(notification.getSubject()).isEqualTo("Integrated test notification");
         assertThat(notification.getMessage()).isEqualTo("Message");
     }
