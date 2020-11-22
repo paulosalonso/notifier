@@ -1,9 +1,8 @@
-package com.github.paulosalonso.notifier.adapter;
+package com.github.paulosalonso.notifier.adapter.notifier.whatsapp;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import com.github.paulosalonso.notifier.LoggerHelper;
-import com.github.paulosalonso.notifier.adapter.notifier.whatsapp.WhatsAppNotifier;
 import com.github.paulosalonso.notifier.domain.Notification;
 import org.junit.jupiter.api.Test;
 
