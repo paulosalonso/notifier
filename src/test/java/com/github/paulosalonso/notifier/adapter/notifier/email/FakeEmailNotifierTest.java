@@ -5,6 +5,7 @@ import ch.qos.logback.core.read.ListAppender;
 import com.github.paulosalonso.notifier.LoggerHelper;
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.github.paulosalonso.notifier.domain.Notification;
+import com.github.paulosalonso.notifier.domain.NotificationType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,11 @@ class FakeEmailNotifierTest {
 
     @Mock
     private EmailProperties emailProperties;
+
+    @Test
+    public void whenGetAttendedNotificationTypeThenReturnEmail() {
+        assertThat(fakeEmailNotifier.attendedNotificationType()).isEqualTo(NotificationType.EMAIL);
+    }
 
     @Test
     void givenAnEmailMessageWithSenderWhenSendThenLogMessageData() {

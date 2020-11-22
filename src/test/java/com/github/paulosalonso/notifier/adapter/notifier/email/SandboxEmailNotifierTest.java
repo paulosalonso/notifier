@@ -3,6 +3,7 @@ package com.github.paulosalonso.notifier.adapter.notifier.email;
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailException;
 import com.github.paulosalonso.notifier.adapter.notifier.email.common.EmailProperties;
 import com.github.paulosalonso.notifier.domain.Notification;
+import com.github.paulosalonso.notifier.domain.NotificationType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -31,6 +32,11 @@ class SandboxEmailNotifierTest {
 
     @Spy
     private JavaMailSenderImpl javaMailSender;
+
+    @Test
+    public void whenGetAttendedNotificationTypeThenReturnEmail() {
+        assertThat(sandboxEmailNotifier.attendedNotificationType()).isEqualTo(NotificationType.EMAIL);
+    }
 
     @Test
     void givenAEmailMessageWithRecipientsWhenSendThenReplaceWithSandboxConfiguredRecipient() throws MessagingException {
