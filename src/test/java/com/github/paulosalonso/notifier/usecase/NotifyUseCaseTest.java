@@ -1,6 +1,7 @@
 package com.github.paulosalonso.notifier.usecase;
 
 import com.github.paulosalonso.notifier.adapter.notifier.slack.SlackNotifier;
+import com.github.paulosalonso.notifier.adapter.notifier.sms.SmsNotifier;
 import com.github.paulosalonso.notifier.adapter.notifier.whatsapp.WhatsAppNotifier;
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
@@ -31,15 +32,19 @@ class NotifyUseCaseTest {
     private SlackNotifier slackNotifier;
 
     @Mock
+    private SmsNotifier smsNotifier;
+
+    @Mock
     private WhatsAppNotifier whatsAppNotifier;
 
     @BeforeEach
     void setup() {
-        notifiers = List.of(emailNotifier, slackNotifier, whatsAppNotifier);
+        notifiers = List.of(emailNotifier, slackNotifier, smsNotifier, whatsAppNotifier);
         notifyUseCase = new NotifyUseCase(notifiers);
 
         lenient().when(emailNotifier.attendedNotificationType()).thenReturn(NotificationType.EMAIL);
         lenient().when(slackNotifier.attendedNotificationType()).thenReturn(NotificationType.SLACK);
+        lenient().when(smsNotifier.attendedNotificationType()).thenReturn(NotificationType.SMS);
         lenient().when(whatsAppNotifier.attendedNotificationType()).thenReturn(NotificationType.WHATSAPP);
     }
 
@@ -54,6 +59,7 @@ class NotifyUseCaseTest {
         verify(emailNotifier).attendedNotificationType();
         verify(emailNotifier).send(notification);
         verify(slackNotifier, never()).send(any(Notification.class));
+        verify(smsNotifier, never()).send(any(Notification.class));
         verify(whatsAppNotifier, never()).send(any(Notification.class));
     }
 
@@ -68,6 +74,7 @@ class NotifyUseCaseTest {
         verify(slackNotifier).attendedNotificationType();
         verify(slackNotifier).send(notification);
         verify(emailNotifier, never()).send(any(Notification.class));
+        verify(smsNotifier, never()).send(any(Notification.class));
         verify(whatsAppNotifier, never()).send(any(Notification.class));
     }
 
@@ -83,6 +90,22 @@ class NotifyUseCaseTest {
         verify(whatsAppNotifier).send(notification);
         verify(emailNotifier, never()).send(any(Notification.class));
         verify(slackNotifier, never()).send(any(Notification.class));
+        verify(smsNotifier, never()).send(any(Notification.class));
+    }
+
+    @Test
+    void givenANotificationWithSmsTypeWhenSendThenCallSmsNotifier() {
+        Notification notification = Notification.builder()
+                .type(NotificationType.SMS)
+                .build();
+
+        notifyUseCase.send(notification);
+
+        verify(smsNotifier).attendedNotificationType();
+        verify(smsNotifier).send(notification);
+        verify(emailNotifier, never()).send(any(Notification.class));
+        verify(slackNotifier, never()).send(any(Notification.class));
+        verify(whatsAppNotifier, never()).send(any(Notification.class));
     }
 
     @Test
