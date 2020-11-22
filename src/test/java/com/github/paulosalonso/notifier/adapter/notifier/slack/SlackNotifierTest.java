@@ -5,6 +5,7 @@ import ch.qos.logback.core.read.ListAppender;
 import com.github.paulosalonso.notifier.LoggerHelper;
 import com.github.paulosalonso.notifier.adapter.notifier.whatsapp.WhatsAppNotifier;
 import com.github.paulosalonso.notifier.domain.Notification;
+import com.github.paulosalonso.notifier.domain.NotificationType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,5 +28,10 @@ public class SlackNotifierTest {
                 .hasSize(1)
                 .first().satisfies(event -> assertThat(event.getFormattedMessage())
                         .isEqualTo("Sending notification via Slack to recipient a,recipient b. Message: test message"));
+    }
+
+    @Test
+    public void whenGetAttendedNotificationTypeThenReturnSlack() {
+        assertThat(notifier.attendedNotificationType()).isEqualTo(NotificationType.SLACK);
     }
 }
