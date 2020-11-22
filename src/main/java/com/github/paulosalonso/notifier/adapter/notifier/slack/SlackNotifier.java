@@ -18,6 +18,6 @@ public class SlackNotifier implements NotifierPort {
 
     @Override
     public NotificationType attendedNotificationType() {
-        return NotificationType.WHATSAPP;
+        return NotificationType.SLACK;
     }
 }
