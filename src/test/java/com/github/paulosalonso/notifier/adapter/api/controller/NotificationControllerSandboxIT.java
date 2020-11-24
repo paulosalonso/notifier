@@ -6,8 +6,8 @@ import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
 import com.github.paulosalonso.notifier.usecase.port.SandboxPort;
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +36,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         "notifier.sandbox.recipients.email=sandbox-recipient",
         "spring.kafka.bootstrap-servers=localhost:9092"
 })
+@TestMethodOrder(OrderAnnotation.class)
 class NotificationControllerSandboxIT {
 
     @LocalServerPort
@@ -55,6 +56,7 @@ class NotificationControllerSandboxIT {
     }
 
     @Test
+    @Order(1)
     void whenPostAEmailNotificationThenReturnAcceptedAndCallEmailNotifier() {
         given()
                 .contentType("application/json")
@@ -84,6 +86,7 @@ class NotificationControllerSandboxIT {
     }
 
     @Test
+    @Order(2)
     void givenAEmailNotificationPostRequestWhenNoRecipientIsConfiguredThenReturnInternalError() {
         Field recipientsMapField = ReflectionUtils.findField(SandboxPort.class, "sandboxRecipients");
         recipientsMapField.setAccessible(true);
