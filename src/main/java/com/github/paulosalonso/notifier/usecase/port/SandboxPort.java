@@ -3,7 +3,6 @@ package com.github.paulosalonso.notifier.usecase.port;
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.domain.NotificationType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,17 +11,11 @@ import static com.github.paulosalonso.notifier.usecase.port.NotifierPort.getNoti
 public class SandboxPort {
 
     private List<NotifierPort> notifiers;
+    private Map<String, List<String>> sandboxRecipients;
 
-    private Map<NotificationType, List<String>> sandboxRecipients;
-
-    public SandboxPort(List<NotifierPort> notifiers, List<String> emailRecipients,
-                       List<String> slackRecipients, List<String> smsRecipients, List<String> whatsAppRecipients) {
+    public SandboxPort(List<NotifierPort> notifiers, Map<String, List<String>> sandboxRecipients) {
         this.notifiers = notifiers;
-        sandboxRecipients = new HashMap<>();
-        sandboxRecipients.put(NotificationType.EMAIL, emailRecipients);
-        sandboxRecipients.put(NotificationType.SLACK, slackRecipients);
-        sandboxRecipients.put(NotificationType.SMS, smsRecipients);
-        sandboxRecipients.put(NotificationType.WHATSAPP, whatsAppRecipients);
+        this.sandboxRecipients = sandboxRecipients;
     }
 
     public void send(Notification notification) {
@@ -37,7 +30,7 @@ public class SandboxPort {
     }
 
     private List<String> resolveRecipients(NotificationType type) {
-        List<String> recipients = sandboxRecipients.get(type);
+        List<String> recipients = sandboxRecipients.get(type.name().toLowerCase());
 
         if (recipients == null || recipients.isEmpty()) {
             throw new SandboxException("Sandbox recipients not configured to " + type.toString() + " notification type");

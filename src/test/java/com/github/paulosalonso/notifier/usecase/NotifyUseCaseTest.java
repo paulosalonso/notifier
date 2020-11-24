@@ -11,10 +11,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
@@ -27,6 +27,8 @@ class NotifyUseCaseTest {
     private List<NotifierPort> notifiers;
 
     private SandboxPort sandbox;
+
+    private Map<String, List<String>> sandboxRecipients;
 
     @Mock
     private NotifierPort emailNotifier;
@@ -43,8 +45,13 @@ class NotifyUseCaseTest {
     @BeforeEach
     void setup() {
         notifiers = List.of(emailNotifier, slackNotifier, smsNotifier, whatsAppNotifier);
-        sandbox = spy(new SandboxPort(notifiers, List.of("email-sandbox-recipient"), List.of("slack-sandbox-recipient"),
-                List.of("sms-sandbox-recipient"), List.of("whatsapp-sandbox-recipient")));
+        sandboxRecipients = Map.of(
+                "email", List.of("email-sandbox-recipient"),
+                "slack", List.of("slack-sandbox-recipient"),
+                "sms", List.of("sms-sandbox-recipient"),
+                "whatsapp", List.of("whatsapp-sandbox-recipient"));
+
+        sandbox = spy(new SandboxPort(notifiers, sandboxRecipients));
 
         notifyUseCase = new NotifyUseCase(notifiers, sandbox, false);
 
