@@ -8,7 +8,6 @@ import com.github.paulosalonso.notifier.domain.NotificationType;
 import com.github.paulosalonso.notifier.usecase.port.NotifierPort;
 import com.github.paulosalonso.notifier.usecase.port.SandboxException;
 import com.github.paulosalonso.notifier.usecase.port.SandboxPort;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +15,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +27,8 @@ import static org.mockito.Mockito.*;
 public class SandboxPortTest {
 
     private SandboxPort sandbox;
+
+    private Map<String, List<String>> sandboxRecipients;
 
     @Mock
     private NotifierPort emailNotifier;
@@ -51,8 +52,13 @@ public class SandboxPortTest {
     @BeforeEach
     void setup() {
         notifiers = List.of(emailNotifier, slackNotifier, smsNotifier, whatsAppNotifier);
-        sandbox = spy(new SandboxPort(notifiers, emailSandboxRecipients,
-                slackSandboxRecipients, smsSandboxRecipients, whatsAppSandboxRecipients));
+        sandboxRecipients = Map.of(
+                "email", emailSandboxRecipients,
+                "slack", slackSandboxRecipients,
+                "sms", smsSandboxRecipients,
+                "whatsapp", whatsAppSandboxRecipients);
+
+        sandbox = spy(new SandboxPort(notifiers, sandboxRecipients));
 
         lenient().when(emailNotifier.attendedNotificationType()).thenReturn(NotificationType.EMAIL);
         lenient().when(slackNotifier.attendedNotificationType()).thenReturn(NotificationType.SLACK);
@@ -142,7 +148,7 @@ public class SandboxPortTest {
 
     @Test
     public void givenNullSandboxRecipientsWhenNotifiesThenThrowsSandboxException() {
-        sandbox = new SandboxPort(notifiers, null, null, null, null);
+        sandbox = new SandboxPort(notifiers, Map.of());
 
         assertThatThrownBy(() -> sandbox.send(Notification.builder().type(NotificationType.EMAIL).build()))
                 .isExactlyInstanceOf(SandboxException.class)
@@ -151,7 +157,8 @@ public class SandboxPortTest {
 
     @Test
     public void givenEmptyListOfSandboxRecipientsWhenNotifiesThenThrowsSandboxException() {
-        sandbox = new SandboxPort(notifiers, emptyList(), emptyList(), emptyList(), emptyList());
+        sandboxRecipients = Map.of("email", emptyList());
+        sandbox = new SandboxPort(notifiers, sandboxRecipients);
 
         assertThatThrownBy(() -> sandbox.send(Notification.builder().type(NotificationType.EMAIL).build()))
                 .isExactlyInstanceOf(SandboxException.class)

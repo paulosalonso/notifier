@@ -15,10 +15,8 @@ public class SandboxConfiguration {
 
     private final SandboxProperties properties;
 
-    @ConditionalOnProperty("${notifier.sandbox.enabled}")
     @Bean
     public SandboxPort sandboxPort(List<NotifierPort> notifiers) {
-        return new SandboxPort(notifiers, properties.emailRecipients,
-                properties.slackRecipients, properties.smsRecipients, properties.whatsAppRecipients);
+        return new SandboxPort(notifiers, properties.recipients);
     }
 }
