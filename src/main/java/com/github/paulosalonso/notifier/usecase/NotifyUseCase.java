@@ -1,11 +1,9 @@
 package com.github.paulosalonso.notifier.usecase;
 
 import com.github.paulosalonso.notifier.domain.Notification;
-import com.github.paulosalonso.notifier.domain.NotificationType;
 import com.github.paulosalonso.notifier.usecase.port.NotifierPort;
 import com.github.paulosalonso.notifier.usecase.port.SandboxPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
