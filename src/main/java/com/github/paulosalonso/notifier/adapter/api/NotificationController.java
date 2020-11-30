@@ -2,7 +2,6 @@ package com.github.paulosalonso.notifier.adapter.api;
 
 import com.github.paulosalonso.notifier.adapter.api.mapper.NotificationDTOMapper;
 import com.github.paulosalonso.notifier.adapter.kafka.producer.NotificationProducer;
-import com.github.paulosalonso.notifier.adapter.mapper.AdditionalPropertiesMapper;
 import com.github.paulosalonso.notifier.domain.Notification;
 import com.github.paulosalonso.notifier.kafka.avro.NotificationType;
 import com.github.paulosalonso.notifier.usecase.NotifyUseCase;
@@ -25,7 +24,6 @@ public class NotificationController {
     private final NotifyUseCase notifyUseCase;
     private final NotificationDTOMapper mapper;
     private final NotificationProducer producer;
-    private final AdditionalPropertiesMapper additionalPropertiesMapper;
     
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -59,7 +57,7 @@ public class NotificationController {
         Map<CharSequence, CharSequence> mappedProperties = new HashMap<>();
 
         properties.keySet()
-                .forEach(key -> mappedProperties.put(key, properties.get(key).toString()));
+                .forEach(key -> mappedProperties.put(key, properties.get(key)));
 
         return mappedProperties;
     }
